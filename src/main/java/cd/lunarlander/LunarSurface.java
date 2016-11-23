@@ -21,6 +21,10 @@ public class LunarSurface {
         this.offsetX = offsetX;
     }
 
+    public double getImageHeight(){
+        return tile.getHeight();
+    }
+
     public void render(GraphicsContext gc){
         double positionY = gc.getCanvas().getHeight() - tile.getHeight();
         double positionX = ( offsetX % tile.getWidth() ) - tile.getWidth();

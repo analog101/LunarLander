@@ -28,10 +28,9 @@ public class LunarLanderApp extends Application {
 
         Image space = new Image( "sky.png" );
 
+        Environment environment = new MoonEnvironment(canvas, new LunarSurface());
 
-
-        Lander lander = new Lander();
-        LunarSurface surface = new LunarSurface();
+        Lander lander = new Lander(environment);
 
         new AnimationTimer()
         {
@@ -42,8 +41,8 @@ public class LunarLanderApp extends Application {
                 gc.drawImage( space, 0, 0 );
                 lander.render( gc );
                 lander.update( t );
-                surface.setOffsetX(-lander.getPositionX());
-                surface.render( gc );
+                environment.getSurface().setOffsetX(-lander.getPositionX());
+                environment.getSurface().render( gc );
 
             }
         }.start();

@@ -13,7 +13,7 @@ public class Lander {
     private double positionY;
     private boolean rightThrusterOn;
     private boolean leftThrusterOn;
-    private Environment environment = new MoonEnvironment();
+    private Environment environment;
     private Image landerImage = new Image( "lunarlander.png" );
     private boolean landed = false;
     private boolean crashed = false;
@@ -25,6 +25,10 @@ public class Lander {
     private int latestFlameImageIndex = 0;
 
     private static final double HORIZONTAL_THRUST_LEVEL = 10;
+
+    public Lander (Environment environment){
+        this.environment = environment;
+    }
 
     public double getPositionX() {
         return positionX;
@@ -62,7 +66,7 @@ public class Lander {
     }
 
     public void render(GraphicsContext gc){
-        gc.drawImage( landerImage, 500, positionY );
+        gc.drawImage( landerImage, gc.getCanvas().getWidth()/2 - landerImage.getWidth() * 0.5, positionY );
         renderFlame( gc );
     }
 
@@ -73,7 +77,7 @@ public class Lander {
         double flameWidth = descentThrust >= 500 ? maxFlameWidth : maxFlameWidth * (descentThrust / 500.0);
         double flameHeight = flameImages[latestFlameImageIndex].getHeight()
                 * (flameWidth / flameImages[latestFlameImageIndex].getWidth());
-        double flamePositionX = 500 + landerImage.getWidth() * 0.5 - flameWidth / 2.0;
+        double flamePositionX = gc.getCanvas().getWidth()/2 - flameWidth / 2.0;
         gc.drawImage(flameImages[latestFlameImageIndex], flamePositionX, flamePositionY, flameWidth, flameHeight);
     }
 
