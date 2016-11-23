@@ -15,32 +15,34 @@ import javafx.stage.Stage;
 public class LunarLanderApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle( "Timeline Example" );
+        primaryStage.setTitle( "Lunar Lander" );
 
         Group root = new Group();
         Scene theScene = new Scene( root );
         primaryStage.setScene( theScene );
 
-        Canvas canvas = new Canvas( 1280, 960 );
+        Canvas canvas = new Canvas( 800, 600 );
         root.getChildren().add( canvas );
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         Image space = new Image( "sky.png" );
 
-        final long startNanoTime = System.nanoTime();
+
 
         Lander lander = new Lander();
         LunarSurface surface = new LunarSurface();
 
         new AnimationTimer()
         {
+            final long startNanoTime = System.nanoTime();
             public void handle(long currentNanoTime)
             {
                 double t = (currentNanoTime - startNanoTime) / 1000000000.0;
                 gc.drawImage( space, 0, 0 );
                 lander.render( gc );
                 lander.update( t );
+                surface.setOffsetX(-lander.getPositionX());
                 surface.render( gc );
 
             }
