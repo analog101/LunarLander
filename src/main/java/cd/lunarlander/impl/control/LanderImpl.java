@@ -4,6 +4,7 @@ import cd.lunarlander.exercise.Lander;
 import cd.lunarlander.exercise.MyLandingController;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.text.Text;
 
 public class LanderImpl implements Lander {
 
@@ -113,6 +114,11 @@ public class LanderImpl implements Lander {
                 * (flameWidth / flameImages[latestFlameImageIndex].getWidth());
         double flamePositionX = gc.getCanvas().getWidth()/2 - flameWidth / 2.0;
         gc.drawImage(flameImages[latestFlameImageIndex], flamePositionX, flamePositionY, flameWidth, flameHeight);
+    }
+
+    private void renderDescentSpeed(GraphicsContext gc){
+        Text text = new Text("Descent speed: "+this.getVelocityY());
+        
     }
 
     public double getAccelerationX(){

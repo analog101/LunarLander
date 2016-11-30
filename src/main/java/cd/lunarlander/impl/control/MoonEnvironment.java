@@ -14,7 +14,7 @@ public class MoonEnvironment implements Environment {
         this.lunarSurface = lunarSurface;
     }
 
-    public double getGravitationalConstant() { return 98; }
+    public double getGravitationalConstant() { return 101; }
 
     @Override
     public double getGroundPositionY(double positionX) {

@@ -41,7 +41,6 @@ public class LunarLanderApp extends Application {
                 LanderImpl.getInstance().update( t );
                 LanderImpl.getInstance().environment.getSurface().setOffsetX(-LanderImpl.getInstance().getPositionX());
                 LanderImpl.getInstance().environment.getSurface().render( gc );
-
             }
         }.start();
 
