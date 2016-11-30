@@ -37,6 +37,8 @@ public class LanderImpl implements Lander {
     private Image[] crashImages = { new Image("crash_1.png"), new Image("crash_5.png"), new Image("crash_3.png"), new Image("crash_4.png"), new Image("crash_5.png")};
     private int latestFlameImageIndex = 0;
     private int latestCrashImageIndex = 0;
+    Image green = new Image("green.png");
+    Image red = new Image("red.png");
 
     private static final double HORIZONTAL_THRUST_LEVEL = 10;
 
@@ -93,6 +95,7 @@ public class LanderImpl implements Lander {
             gc.drawImage(landerImage, gc.getCanvas().getWidth() / 2 - landerImage.getWidth() * 0.5, positionY);
             renderFlame(gc);
         }
+        renderDescentSpeed(gc);
     }
 
     private void renderCrash(GraphicsContext gc){
@@ -117,8 +120,10 @@ public class LanderImpl implements Lander {
     }
 
     private void renderDescentSpeed(GraphicsContext gc){
-        Text text = new Text("Descent speed: "+this.getVelocityY());
-        
+
+        gc.drawImage(green, 10, 10, getVelocityY() < 0 ? 0 : getVelocityY() > 50 ? 50 : getVelocityY(), 10 );
+        gc.drawImage(red, 60, 10, getVelocityY() <= 50 ? 0 : getVelocityY() > 200 ? 200 : getVelocityY(), 10 );
+
     }
 
     public double getAccelerationX(){
@@ -150,7 +155,7 @@ public class LanderImpl implements Lander {
     }
 
     public void descentThrusterOn(){
-        descentThrust = 0.01;
+        descentThrusterOn(1);
     }
 
     public void descentThrusterOn(int thrust){
