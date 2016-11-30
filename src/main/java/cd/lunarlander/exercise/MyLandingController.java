@@ -11,8 +11,7 @@ public class MyLandingController implements LanderController {
     public void control(Lander lander) {
 
         //Your code goes here!!!
-        lander.descentThrusterOn(1);
-        System.out.println(lander.getVelocityY());
+
     }
 
     public static void main(String[] args) throws Exception{
