@@ -1,4 +1,4 @@
-package cd.lunarlander;
+package cd.lunarlander.impl.control;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -13,9 +13,11 @@ import javafx.stage.Stage;
  * Created by Steve on 17/11/2016.
  */
 public class LunarLanderApp extends Application {
+
+
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle( "Lunar Lander" );
+        primaryStage.setTitle( "Lunar LanderImpl" );
 
         Group root = new Group();
         Scene theScene = new Scene( root );
@@ -28,10 +30,6 @@ public class LunarLanderApp extends Application {
 
         Image space = new Image( "sky.png" );
 
-        Environment environment = new MoonEnvironment(canvas, new LunarSurface());
-
-        Lander lander = new Lander(environment);
-
         new AnimationTimer()
         {
             final long startNanoTime = System.nanoTime();
@@ -39,10 +37,10 @@ public class LunarLanderApp extends Application {
             {
                 double t = (currentNanoTime - startNanoTime) / 1000000000.0;
                 gc.drawImage( space, 0, 0 );
-                lander.render( gc );
-                lander.update( t );
-                environment.getSurface().setOffsetX(-lander.getPositionX());
-                environment.getSurface().render( gc );
+                LanderImpl.getInstance().render( gc );
+                LanderImpl.getInstance().update( t );
+                LanderImpl.getInstance().environment.getSurface().setOffsetX(-LanderImpl.getInstance().getPositionX());
+                LanderImpl.getInstance().environment.getSurface().render( gc );
 
             }
         }.start();

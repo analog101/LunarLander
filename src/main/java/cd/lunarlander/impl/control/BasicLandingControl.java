@@ -1,7 +1,6 @@
-package cd.lunarlander.control;
+package cd.lunarlander.impl.control;
 
-import cd.lunarlander.Lander;
-import cd.lunarlander.LanderController;
+import cd.lunarlander.exercise.Lander;
 
 public class BasicLandingControl implements LanderController{
 

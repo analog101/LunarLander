@@ -1,4 +1,4 @@
-package cd.lunarlander;
+package cd.lunarlander.impl.control;
 
 public interface Environment {
 

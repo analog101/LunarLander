@@ -1,4 +1,4 @@
-package cd.lunarlander;
+package cd.lunarlander.impl.control;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;

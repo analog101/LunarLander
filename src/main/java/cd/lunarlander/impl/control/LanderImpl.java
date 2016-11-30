@@ -1,32 +1,45 @@
-package cd.lunarlander;
+package cd.lunarlander.impl.control;
 
-import cd.lunarlander.control.BasicLandingControl;
+import cd.lunarlander.exercise.Lander;
+import cd.lunarlander.exercise.MyLandingController;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-public class Lander {
+public class LanderImpl implements Lander {
+
+    private static final LanderImpl instance = new LanderImpl(new MoonEnvironment(800,600,new LunarSurface()));
+
+    private LanderImpl()
+    {}
+
+    public static LanderImpl getInstance(){
+        return instance;
+    }
 
     private double descentThrust;
     private double velocityX;
     private double velocityY;
     private double positionX = 500;
-    private double positionY;
+    private double positionY = 20;
     private boolean rightThrusterOn;
     private boolean leftThrusterOn;
-    private Environment environment;
+    protected Environment environment;
     private Image landerImage = new Image( "lunarlander.png" );
     private boolean landed = false;
     private boolean crashed = false;
     private double lastUpdatedTime = 0;
     private double lastUpdatedFlameTime = 0;
-    private LanderController controller = new BasicLandingControl();
+    private double lastUpdatedCrashTime = 0;
+    private LanderController controller = new MyLandingController();
     private Image[] flameImages = { new Image("flame_1.png"), new Image("flame_2.png"), new Image("flame_3.png"),
             new Image("flame_4.png"), new Image("flame_5.png") };
+    private Image[] crashImages = { new Image("crash_1.png"), new Image("crash_5.png"), new Image("crash_3.png"), new Image("crash_4.png"), new Image("crash_5.png")};
     private int latestFlameImageIndex = 0;
+    private int latestCrashImageIndex = 0;
 
     private static final double HORIZONTAL_THRUST_LEVEL = 10;
 
-    public Lander (Environment environment){
+    public LanderImpl(Environment environment){
         this.environment = environment;
     }
 
@@ -49,8 +62,18 @@ public class Lander {
     public void update(double time){
         positionX += velocityX * (time-lastUpdatedTime);
         positionY += velocityY * (time-lastUpdatedTime);
-        if (crashed){ return; }
+
+        if (positionY < -10) positionY = -10;
+
         if (landed) return;
+
+        if (time - lastUpdatedFlameTime > 0.1){
+            latestFlameImageIndex = (latestFlameImageIndex + 1) % flameImages.length; lastUpdatedFlameTime = time;
+        }
+        if (time - lastUpdatedCrashTime > 0.1){
+            latestCrashImageIndex = (latestCrashImageIndex + 1) % crashImages.length; lastUpdatedCrashTime = time;
+        }
+        if (crashed){ return; }
         if (this.getAltitude() <= 0){ processLanding(); }
         else {
             velocityX += getAccelerationX() * (time-lastUpdatedTime);
@@ -58,16 +81,27 @@ public class Lander {
         }
         controller.control(this);
         lastUpdatedTime = time;
-        if (time - lastUpdatedFlameTime > 0.1){
-            latestFlameImageIndex = (latestFlameImageIndex + 1) % flameImages.length;
-            lastUpdatedFlameTime = time;
-            System.out.println(latestFlameImageIndex);
-        }
+
     }
 
     public void render(GraphicsContext gc){
-        gc.drawImage( landerImage, gc.getCanvas().getWidth()/2 - landerImage.getWidth() * 0.5, positionY );
-        renderFlame( gc );
+        if (crashed){
+            renderCrash(gc);
+        }
+        else {
+            gc.drawImage(landerImage, gc.getCanvas().getWidth() / 2 - landerImage.getWidth() * 0.5, positionY);
+            renderFlame(gc);
+        }
+    }
+
+    private void renderCrash(GraphicsContext gc){
+
+        double crashWidth = landerImage.getWidth() * 1.5;
+        double crashHeight = crashImages[latestCrashImageIndex].getHeight()
+                * (crashWidth / crashImages[latestCrashImageIndex].getWidth());
+        double crashPositionX = gc.getCanvas().getWidth()/2 - crashWidth / 2.0;
+        double crashPositionY = positionY + landerImage.getHeight()/2 - crashHeight/2;
+        gc.drawImage(crashImages[latestCrashImageIndex], crashPositionX, crashPositionY, crashWidth, crashHeight);
     }
 
     private void renderFlame(GraphicsContext gc){
@@ -139,6 +173,7 @@ public class Lander {
         leftThrusterOn = false;
     }
 
-
-
+    public void setController(LanderController controller) {
+        this.controller = controller;
+    }
 }
